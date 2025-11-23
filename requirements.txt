@@ -1,0 +1,27 @@
+#Python 3.12
+# --- LangChain Ecosystem ---
+langchain==1.0.8
+langchain-community
+langchain-core==1.1.0
+langgraph==1.0.3
+
+# --- LLM Integrations (Model Providers) ---
+langchain-openai==1.0.3
+openai
+langchain-groq==1.0.1
+groq
+langchain-ollama==1.0.0
+ollama==0.6.1
+langchain-huggingface
+huggingface-hub
+
+# --- Vector Databases & Graph DBs ---
+qdrant-client==1.15.0
+redis==7.1.0
+
+# --- Utilities & Cloud ---
+python-dotenv==1.1.0
+requests==2.32.5
+
+
+
