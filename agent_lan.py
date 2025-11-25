@@ -11,7 +11,7 @@ from langchain_core.messages import HumanMessage, AIMessage
 from langchain_core.output_parsers import StrOutputParser
 from llm import carregar_llm
 from tool_vector import find_chunk
-from llm_guard.input_scanners import PromptInjection, Secrets, TokenLimit
+from llm_guard.input_scanners import PromptInjection, TokenLimit
 from llm_guard.input_scanners.prompt_injection import MatchType 
 from llm_guard import scan_prompt
 import uuid
@@ -297,8 +297,7 @@ agent_graph = create_agent_graph()
 
 # ========== GUARDRAILS ==========
 prompt_scanners = [
-    PromptInjection(threshold=0.8, match_type=MatchType.FULL),
-    Secrets(),                         
+    PromptInjection(threshold=0.8, match_type=MatchType.FULL),                       
     TokenLimit(limit=2048)
 ]
 
@@ -368,4 +367,5 @@ def clear_chat_history(session_id: str = "default"):
 #         history = get_chat_history(session_id)
 #         if history and len(history) >= 2:
 #             last_ai_msg = [msg for msg in history if isinstance(msg, AIMessage)][-1]
+
 #             print(f" Decisão armazenada no histórico")
