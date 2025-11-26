@@ -91,11 +91,11 @@ class AgentState(TypedDict):
 
 # ========== PROMPT DE DECISÃO COM LLM ==========
 decision_prompt = ChatPromptTemplate.from_messages([
-    ("system", """Você é um roteador inteligente que decide qual ferramenta usar para responder perguntas sobre cidades inteligentes.
+    ("system", """Você é um roteador inteligente que decide qual ferramenta usar para responder perguntas SOMENTE sobre cidades inteligentes constantes nos cadernos técnicos desenvolvidos pelo IPT e SDE.
 
 ANÁLISE DA PERGUNTA:
 - Use RAG se a pergunta for sobre: conceitos específicos, tecnologias, detalhes técnicos, conteúdo dos cadernos do IPT/SDE, informações precisas dos documentos
-- Use CHAT para comprimentos e informar a pessoa que você só responde perguntas sobre os cadernos técnicos de cidades inteligentes.
+- Use CHAT para informar a pessoa que você só responde perguntas SOMENTE sobre os cadernos técnicos de cidades inteligentes desenvolvidos pelo IPT e SDE.
 
 CADERNOS DO IPT/SDE (usar RAG):
 - Conectividade
@@ -170,25 +170,26 @@ def route_question(state: AgentState) -> AgentState:
 
 
 def call_chat_tool(state: AgentState) -> AgentState:
-    """Nó do Chat: responde perguntas gerais, como cumprimentos e explica ao usuário que só 
-    responde sobre os cadernos técnicos, não fala de outros assuntos, mesmo que solicitado"""
+    """Nó do Chat:explica ao usuário que SOMENTE responde perguntas sobre os cadernos técnicos, 
+    não fala de outros assuntos, mesmo que solicitado"""
     
     # Carrega histórico completo
     full_history = load_chat_history(state["session_id"])
     
     chat_prompt = ChatPromptTemplate.from_messages([
         ("system", """Você é um assistente especializado em cidades inteligentes.
-        Sua função é orientar o usuário a fazer perguntas sobre os cadernos técnicos do IPT/SDE.
-        Responda de forma educada e direcionada ao tema de cidades inteligentes.
+        Sua função é orientar o usuário a fazer perguntas SOMENTE sobre os cadernos técnicos do IPT/SDE.
+        Se o usuário fizer perguntas fora deste escopo, explique gentilmente que você só pode ajudar com temas de cidades inteligentes
+        presentes nos cadernos técnicos desenvolvidos pelo IPT e SDE.
+        Nunca responda perguntas fora do contexto dos cadernos técnicos sobre cidades inteligentes desenvolvidos pelo IPT e SDE.
         
         CADERNOS DISPONÍVEIS:
-        - Conectividade
+        - Conectividade urbana
         - Mobilidade Urbana  
         - Planejamento Urbano e Governança
-        - Segurança
-        - Serviços
-        
-        Se o usuário fizer perguntas fora deste escopo, explique gentilmente que você só pode ajudar com temas de cidades inteligentes."""),
+        - Segurança urbana
+        - Serviços urbanos
+        """),
         *full_history,
         ("human", "{input}"),
     ])
@@ -369,5 +370,6 @@ def clear_chat_history(session_id: str = "default"):
 #             last_ai_msg = [msg for msg in history if isinstance(msg, AIMessage)][-1]
 
 #             print(f" Decisão armazenada no histórico")
+
 
 
