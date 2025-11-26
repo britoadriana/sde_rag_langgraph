@@ -297,7 +297,7 @@ agent_graph = create_agent_graph()
 
 # ========== GUARDRAILS ==========
 prompt_scanners = [
-    PromptInjection(threshold=0.8, match_type=MatchType.FULL),                       
+    PromptInjection(threshold=0.92, match_type=MatchType.FULL),                       
     TokenLimit(limit=1024)
 ]
 
@@ -369,4 +369,5 @@ def clear_chat_history(session_id: str = "default"):
 #             last_ai_msg = [msg for msg in history if isinstance(msg, AIMessage)][-1]
 
 #             print(f" Decisão armazenada no histórico")
+
 
