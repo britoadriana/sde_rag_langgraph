@@ -181,46 +181,19 @@ def call_chat_tool(state: AgentState) -> AgentState:
     # Carrega histórico completo para verificar contexto
     full_history = load_chat_history(state["session_id"])
     
-    # Verifica se é um cumprimento inicial ou tentativa de fugir do escopo
-    is_greeting = any(word in state["input"].lower() for word in 
-                     ['oi', 'olá', 'ola', 'bom dia', 'boa tarde', 'boa noite', 'hello', 'hi'])
-    
-    # Conta tentativas consecutivas de fugir do escopo
-    escape_attempts = 0
-    for i, msg in enumerate(reversed(full_history)):
-        if i >= 4:  # Analisa apenas as últimas 4 mensagens
-            break
-        if isinstance(msg, HumanMessage):
-            # Se a mensagem anterior foi classificada como use_chat, conta como tentativa
-            if any(prev_msg.content == fixed_response for prev_msg in full_history if isinstance(prev_msg, AIMessage)):
-                escape_attempts += 1
-    
     # Resposta fixa principal
     fixed_response = """Olá! Sou um assistente especializado em cidades inteligentes com base nos cadernos técnicos desenvolvidos pelo IPT (Instituto de Pesquisas Tecnológicas) e SDE (Secretaria de Desenvolvimento Econômico) de São Paulo.
 
-Meu conhecimento é restrito aos seguintes temas:
-• Conectividade Urbana
-• Mobilidade Urbana  
-• Planejamento Urbano e Governança
-• Segurança urbana
-• Serviços urbanos
-
-Posso ajudar com perguntas específicas sobre esses cadernos técnicos. Sobre outros assuntos, não possuo informações.
-
-Em que posso ajudar você sobre cidades inteligentes?"""
-
-    # Resposta mais firme para múltiplas tentativas
-    if escape_attempts >= 2:
-        fixed_response = "Notei várias tentativas de abordar assuntos fora do meu escopo. Meu foco é exclusivamente em cidades inteligentes baseadas nos cadernos técnicos do IPT/SDE. Podemos retomar a esse tema específico?"
-
-    # Resposta mais curta para cumprimentos
-    if is_greeting and escape_attempts == 0:
-        fixed_response = """Olá! Sou especializado em cidades inteligentes com base nos cadernos técnicos do IPT e SDE.
-
-Posso ajudar com temas como conectividade, mobilidade, planejamento urbano, segurança e serviços urbanos.
-
-Sobre o que gostaria de saber?"""
-
+    Meu conhecimento é restrito aos seguintes temas:
+    • Conectividade Urbana
+    • Mobilidade Urbana  
+    • Planejamento Urbano e Governança
+    • Segurança urbana
+    • Serviços urbanos
+    
+    Posso ajudar com perguntas específicas sobre esses cadernos técnicos. Sobre outros assuntos, não possuo informações.
+    Em que posso ajudar você sobre cidades inteligentes?"""
+    
     return {**state, "response": fixed_response}
 
 
@@ -395,6 +368,7 @@ def clear_chat_history(session_id: str = "default"):
 #             last_ai_msg = [msg for msg in history if isinstance(msg, AIMessage)][-1]
 
 #             print(f" Decisão armazenada no histórico")
+
 
 
 
